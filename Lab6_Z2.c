@@ -20,9 +20,8 @@ MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 srand(time(NULL));
 printf("Podaj p: ");
 scanf("%d", &p);
-ret = fork();
-if(ret == 0)
-{
+
+
 for(i=0; i<=p; i++)
 {
 	a = rand()%10;
@@ -37,24 +36,6 @@ for(i=0; i<=p; i++)
     
 }
 printf("process %d of %d", rank, size);
-}
-else
-{
-for(i=0; i<=p; i++)
-{ 
-	a = rand()%10;
-	b = rand()%10+10;
-	n = rand()%10;
-        float calka = 0;
-        float h = (b-a)/n;
-        for(int j=1; j<= n-1; j++){calka+=fx(a+1*h);}
-        calka += (fx(a) + fx(b)) / 2;
-        calka *= h;
-        printf("%f", calka);
-
-}
-    printf("process %d of %d", rank, size);
-}
 
 MPI_Finalize();
 return 0;
