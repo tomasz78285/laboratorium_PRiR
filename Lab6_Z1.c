@@ -18,7 +18,7 @@ float potega(float x, float y)
 int main(int argc, char **argv)
 {
    int rank, size;
-   int ret,p,n;
+   int p,n;
    float pi, suma;
    MPI_Init(&argc, &argv);
    MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -27,11 +27,9 @@ int main(int argc, char **argv)
 
    printf("Podaj p: ");
    scanf("%d", &p);
-   ret = fork();
    srand(time(NULL));
 
-   if(ret == 0)
-   {
+  
       for(int i = 0; i<=p; i++){
 	  n = rand()%5000+100;
 	     for(int j=1; j<=n; j++)
@@ -42,22 +40,7 @@ int main(int argc, char **argv)
       printf("%f", pi);
       }
 printf("process %d of %d", rank, size);
-   }
 
-   else
-   {
-      for(int i = 0; i<=p; i++){
-	   n = rand()%5000 + 100;
-        for(int j=1; j<=n; j++)
-        { 
-                suma += potega((-1),(j-1))/(2*j-1);
-        } 
-        pi = 4*suma;
-	printf("%f", pi);
-	
-   }
-printf("process %d of %d", rank, size);
-}
-   MPI_Finalize();
+	MPI_Finalize();
    return 0;
 }
