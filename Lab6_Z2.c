@@ -1,42 +1,52 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<sys/types.h>
-#include<time.h>
+#include <stdio.h>
 #include "mpi.h"
 
-float fx(float x)
+float f(float x)
 {
-return x*x;
+    return x * x;
 }
 
-int main(argc, argv)
-int argc;
-char **argv;
+int main(int argc, char **argv)
 {
-int rank, size;
-int a, b, n, i, j, p, ret;
-MPI_Comm_size(MPI_COMM_WORLD, &size);
-MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-srand(time(NULL));
-printf("Podaj p: ");
-scanf("%d", &p);
+    int rank, size;
+    MPI_Init( &argc, &argv );
+    MPI_Comm_size( MPI_COMM_WORLD, &size );
+    MPI_Comm_rank( MPI_COMM_WORLD, &rank );
+    MPI_Status status;
 
+    float wynik = 0;
+    float a = 0;
+    float b = 10;
+    float dx = (b-a)/size;
 
-for(i=0; i<=p; i++)
-{
-	a = rand()%10;
-	b = rand()%10+10;
-	n = rand()%10;
-	float calka = 0;
-	float h = (b-a)/n;
-	for(int j=1; j<= n-1; j++){calka+=fx(a+1*h);}
-	calka += (fx(a) + fx(b)) / 2;
-	calka *= h;
-	printf("%f", calka);
+    if(rank!=size-1)
+    {
+        MPI_Recv(&wynik, 1, MPI_FLOAT, rank+1, 25, MPI_COMM_WORLD, &status);
+    }
+
+    if(rank+1==size)
+    {
+        wynik = wynik + f(b)/2;
+    }
+    else if(rank==0)
+    {
+        wynik = wynik + f(a)/2;
+    }
+    else
+    {
+        wynik = wynik + f(a + rank * dx);
+    }
     
-}
-printf("process %d of %d", rank, size);
 
-MPI_Finalize();
-return 0;
+    if(rank!=0)
+    {
+        MPI_Send(&wynik, 1, MPI_FLOAT, rank-1, 25, MPI_COMM_WORLD);
+    }
+    else
+    {
+        printf("%f\n", dx * wynik);
+    }
+    
+    MPI_Finalize();
+    return 0;
 }
