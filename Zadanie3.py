@@ -1,4 +1,3 @@
-# wczytanie potrzebnych bibliotek
 import tensorflow as tf
 
 #wczytanie danych 
