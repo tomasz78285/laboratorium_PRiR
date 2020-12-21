@@ -1,0 +1,70 @@
+Programowanie równoległę i rozproszone
+Sprawozdanie z lalaboratorium nr 10
+Tomasz Kadłubowski
+
+Zadanie 1
+Zadaniem było napsanie w środowisku TensorFlow w Google Colab programu implementującego całkowanie numeryczne następującymi metodami:
+prostokątów
+trapezów
+Simpsona
+W tym celu utworzyłem trzy funkcje (każda odpowiadająca innej metodzie), a następnie je wywołałem. Ostatnim działaniem było sprawdzenie czy można przyspieszyć obliczenia wykorzystując klastry GPU w chmurze Google. W tym celu określiłem w ustawieniach notatnika akcelerator sprzętowy na GPU a następnie wstawiłem kod:
+import tensorflow as tf
+device_name = tf.test.gpu_device_name()
+if device_name != '/device:GPU:0':
+	raise SystemError('GPU device not found')
+print('Found GPU at: {}'.format(device_name))
+
+Zadanie 2
+Celem było rozwinięcie programu do interpolacji funkcji przedstawionej na wykładzie na interpolację funkcji 1D (f(x) = x*(x+1)-5) oraz 2D (f(x,y) = sin(sqrt(x*x + y*y))/sin(x*x + y*y)). W tym celu orzedstawiony w przykładzie model keras zmodyfikowałem poprzez zwiększenie liczby neuronów i dostępnych warstw. Oprócz tego dla funkcji 1D model keras ma jedno wejście (x) oraz jedno wyjście (f(x)), a dla funkcji 2D dwa wejście(x,y) oraz jedno wyjście(f(x,y)). Na koniec analogicznie do zadania 1 sprawdziłem możliwość przyspieszenia obliczeń, przy użyciu klastrów GPU w chmurze Google.
+
+Zadanie 3
+Klasyfikator zdjęć odzieży fashion-MNIST.
+Pierwsze linie kodu to wczytanie potrzebnych bibliotek oraz danych. Naszą cechą jest obraz, który jest tabelą w NumPy. Wartoścami tej macierzy są wartości od 0 do 255 co odpowiada wartościom w notacji RGB. Kategorią, którą będziemy przewidywać jest zbiór liczb całkowitych od 0 do 9, które odpowiadają klasie ubrań przedstawionych na obrazkach.
+Wyznaczamy pierwsze 40 elementów z naszgo zbioru, anastępnie przygotowujemy dane: 
+X_train = X_train.astype('float32') / 255.0
+X_val = X_val.astype('float32') / 255.0
+from tensorflow.keras.utils import to_categorical
+ 
+y_train = to_categorical(y_train, len(class_names))
+y_val = to_categorical(y_val, len(class_names))
+
+Kolejnym krokiem jest dobó odpowiednije architektury:
+from tensorflow.keras.models import Sequential
+model = Sequential()
+from tensorflow.keras.layers import Flatten, add
+model.add(Flatten(input_shape=(28, 28)))
+Następnie definiujemy warstwy ukrytą i wyjściową, kompilujemy model i podumowujemy go (model.summary()).
+Kolejnym etapami są ttremnowanie modelu, wizualizacja z trenowania, preydykcja. 
+Ostatnim krokiem jest dobranie ostatecznej architektury. W tym przypadku:
+from tensorflow.keras.callbacks import EarlyStopping
+ 
+model_best = Sequential()
+model_best.add(Flatten(input_shape=(28, 28)))
+model_best.add(Dense(128, activation='relu'))
+model_best.add(Dropout(0.3))
+model_best.add(Dense(64, activation='relu'))
+model_best.add(Dropout(0.3))
+model_best.add(Dense(32, activation='relu'))
+model_best.add(Dropout(0.3))
+model_best.add(Dense(10, activation = 'softmax'))
+ 
+model_best.compile(optimizer='adam',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+ 
+EarlyStop = EarlyStopping(monitor='val_loss', 
+                          patience=5,
+                          verbose=1)
+ 
+history_best = model_best.fit(X_train, 
+           y_train, 
+           epochs=50,
+           verbose=1,
+           batch_size = 1024,
+           validation_data = (X_val, y_val),
+           callbacks = [EarlyStop]
+           )
+ 
+draw_curves(history_best, key1='accuracy', ylim1=(0.7, 1.0), 
+            key2='loss', ylim2=(0.0, 0.8))
+
