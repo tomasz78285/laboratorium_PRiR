@@ -1,5 +1,5 @@
 Programowanie równoległę i rozproszone
-Sprawozdanie z lalaboratorium nr 10
+Sprawozdanie z laboratorium nr 10
 Tomasz Kadłubowski
 
 Zadanie 1
