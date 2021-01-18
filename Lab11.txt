@@ -1,0 +1,20 @@
+Sprawozdanie Lab 11
+
+Algorytm umożliwia transfer stylu. Polega to na wygenerowaniu obrazu z tą samą
+zawartością co obraz podstawowy, ale z rozszerzeniem stylu innego obrazu. Osiąga się to 
+poprzez optymalizację funkcji strat.
+
+Na początku należy zaimportować odpowiednie biblioteki: numpy, tensorflow, keras
+i vgg19. Po zaimportowaniu obrazów określamy wagi składników strat oraz wymiary 
+generowania obrazu. Następnym krokiem jest utworzenie odpowiednich funkcji. 
+Do otwierania, zmiany rozmiaru i formatowania obrazów do odpowiednich tensorów oraz
+funkcja użyteczna do konwersji tensora na prawidłowy obraz. Ważne jest również 
+określenie matrycy gramowej tensora obrazu oraz utrata stylu. Utrata stylu ma na celu
+utrzymanie styl obrazu odniesienia w wygenerowanym obrazie.
+
+Następna funkcja to pomocnicza funkcja utraty zaprojektowany w celu utrzymania
+„zawartości” obraz podstawowy w wygenerowanym obrazie
+
+
+Uzyskujemy symboliczne dane wyjściowe każdej warstwy „klucza” (nadaliśmy im unikalne
+nazwy).
