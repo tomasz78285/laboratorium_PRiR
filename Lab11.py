@@ -1,4 +1,4 @@
-# Żródło: https://keras.io/examples/generative/neural_style_transfer/
+# Żródło: https://github.com/keras-team/keras-io/blob/master/examples/generative/neural_style_transfer.py
 
 import numpy as np
 import tensorflow as tf
