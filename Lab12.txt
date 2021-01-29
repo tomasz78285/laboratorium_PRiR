@@ -1,0 +1,22 @@
+Algorytm służy rozpoznawaniu twarzy na zdjęciach
+
+Do implementacji ImageAI potrzebujemy:
+– Tensorflow
+– Numpy
+– SciPy
+– OpenCV
+– Pillow
+– Matplotlib
+– H5py
+– Keras
+– ImageAI
+
+Pierwsze trzy linie to: zaimportowanie biblioteki ImageAI, zaimportowanie klasy os oraz zdefiniowanie zmiennej,
+której celem jest umieszczenie obrazu po analizie w tym samym folderze, w którym zamieściliśmy oryginalne zdjęcie.
+
+Następnie, w pierwszej linii zdefiniowaliśmy klasę obiektu, w drugiej linii ustawiliśmy model type dla RetineNet,
+w trzeciej linii ustawiliśmy model path, w czwartej wczytaliśmy model do klasy rozpoznawania obiektu, a później wywołaliśmy funkcję rozpoznawania obiektu, 
+którą wykorzystamy do wykrywania i analizy ścieżki obrazu wejściowego i ścieżkę obrazu wyjściowego.
+
+Za pomocą pętli for sprawdzamy wszystkie wyniki zwrócone przez funkcję detector.detectObjectsFromImage, 
+a następnie uzyskujemy nazwę i procentowe prawdopodobieństwo modelu dla każdego obiektu wykrytego na obrazie w drugim wierszu.
